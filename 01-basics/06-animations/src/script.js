@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import gsap from "gsap";
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -40,6 +41,12 @@ let time = Date.now();
 const clock = new THREE.Clock();
 
 /**
+ * Tween with GreenSock library
+ */
+gsap.to(mesh.position, { duration: 1, delay: 1, x: 2 });
+gsap.to(mesh.position, { duration: 1, delay: 2, x: 0 });
+
+/**
  * Animations
  */
 const tick = () => {
@@ -55,10 +62,10 @@ const tick = () => {
   //   mesh.position.x += 0.01;
   //   mesh.position.y += 0.01;
   //   mesh.rotation.y += 0.001 * deltaTime;
-//   mesh.rotation.y = elapsedTime;
-  mesh.position.y = Math.sin(elapsedTime);
-  mesh.position.x = Math.cos(elapsedTime);
-  camera.lookAt(mesh.position);
+  //   mesh.rotation.y = elapsedTime;
+  //   mesh.position.y = Math.sin(elapsedTime);
+  //   mesh.position.x = Math.cos(elapsedTime);
+  //   camera.lookAt(mesh.position);
 
   // Render
   renderer.render(scene, camera);
