@@ -27,6 +27,23 @@ const sizes = {
 };
 
 /**
+ * Resizing
+ */
+
+window.addEventListener('resize', () => {
+  // Update size
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  // Update camera
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  // Update renderer
+  renderer.setSize(sizes.width, sizes.height);
+})
+
+/**
  * Camera
  */
 // Base camera
