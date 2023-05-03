@@ -52,6 +52,7 @@ const particlesMaterial = new THREE.PointsMaterial({
 });
 // particlesMaterial.depthTest = false // fix#2 but may cause bugs if there are other objects
 particlesMaterial.depthWrite = false; // fix#3
+particlesMaterial.blending = THREE.AdditiveBlending;
 
 // Points
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
