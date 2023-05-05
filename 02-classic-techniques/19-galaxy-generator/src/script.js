@@ -24,6 +24,9 @@ parameters.radius = 5;
 parameters.branches = 3;
 parameters.spin = 1;
 parameters.randomness = 0.02;
+parameters.randomnessPower = 3;
+parameters.insideColor = '#ff6030'
+parameters.outsideColor = '#1b3984'
 
 let geometry = null;
 let material = null;
@@ -52,9 +55,13 @@ const generateGalaxy = () => {
     const branchAngle =
       ((i % parameters.branches) / parameters.branches) * Math.PI * 2;
 
-    positions[i3] = Math.cos(branchAngle + spinAngle) * radius;
-    positions[i3 + 1] = 0;
-    positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius;
+    const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+    const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+    const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+
+    positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+    positions[i3 + 1] = randomY;
+    positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
   }
   geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
@@ -66,6 +73,7 @@ const generateGalaxy = () => {
     sizeAttenuation: true,
     depthWrite: false,
     blending: THREE.AdditiveBlending,
+    color: '#ff5588'
   });
 
   /**
@@ -112,6 +120,14 @@ gui
   .max(2)
   .step(0.001)
   .onFinishChange(generateGalaxy);
+gui
+  .add(parameters, "randomnessPower")
+  .min(1)
+  .max(10)
+  .step(0.001)
+  .onFinishChange(generateGalaxy);
+gui.addColor(parameters, 'insideColor').onFinishChange(generateGalaxy);
+gui.addColor(parameters, 'outsideColor').onFinishChange(generateGalaxy);
 
 /**
  * Sizes
