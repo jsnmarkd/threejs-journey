@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "lil-gui";
-import CANNON from 'cannon';
+import CANNON from "cannon";
 
 /**
  * Debug
@@ -31,6 +31,31 @@ const environmentMapTexture = cubeTextureLoader.load([
   "/textures/environmentMaps/0/pz.png",
   "/textures/environmentMaps/0/nz.png",
 ]);
+
+/**
+ * Physics World
+ */
+
+// World
+const world = new CANNON.World();
+world.gravity.set(0, -9.82, 0);
+
+// Sphere
+const sphereShape = new CANNON.Sphere(0.5);
+const sphereBody = new CANNON.Body({
+  mass: 1,
+  position: new CANNON.Vec3(0, 3, 0),
+  shape: sphereShape,
+});
+world.add(sphereBody);
+
+// Floor
+const floorShape = new CANNON.Plane();
+const floorBody = new CANNON.Body();
+floorBody.mass = 0;
+floorBody.addShape(floorShape);
+floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5);
+world.addBody(floorBody);
 
 /**
  * Test sphere
@@ -136,9 +161,21 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  * Animate
  */
 const clock = new THREE.Clock();
+let prevElapsedTime = 0;
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+  const deltaTime = elapsedTime - prevElapsedTime;
+
+  prevElapsedTime = elapsedTime;
+
+  // Update physics world
+  world.step(1 / 60, deltaTime, 3);
+
+  // sphere.position.x = sphereBody.position.x
+  // sphere.position.y = sphereBody.position.y
+  // sphere.position.z = sphereBody.position.z
+  sphere.position.copy(sphereBody.position);
 
   // Update controls
   controls.update();
