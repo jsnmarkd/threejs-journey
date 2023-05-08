@@ -11,7 +11,8 @@ const parameters = {
 };
 
 gui.addColor(parameters, "materialColor").onChange(() => {
-  material.color.set(parameters.materialColor);
+  material.color.set(parameters.materialColor)
+  particlesMaterial.color.set(parameters.materialColor);
 });
 
 /**
@@ -58,6 +59,37 @@ mesh3.position.x = 2;
 scene.add(mesh1, mesh2, mesh3);
 
 const sectionMeshes = [mesh1, mesh2, mesh3];
+
+/**
+ * Particles
+ */
+
+// Geometry
+const particleCount = 200;
+const positions = new Float32Array(particleCount * 3);
+
+for (let i = 0; i < particleCount; i++) {
+  positions[i * 3] = (Math.random() - 0.5) * 10; // x position
+  positions[i * 3 + 1] = objectsDistance * 0.5 - Math.random() * objectsDistance * sectionMeshes.length; // y position
+  positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z position
+}
+
+const particlesGeometry = new THREE.BufferGeometry();
+particlesGeometry.setAttribute(
+  "position",
+  new THREE.BufferAttribute(positions, 3)
+);
+
+// Material
+const particlesMaterial = new THREE.PointsMaterial({
+  color: parameters.materialColor,
+  sizeAttenuation: true,
+  size: 0.03,
+});
+
+// Points
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particles);
 
 /**
  * Lights
