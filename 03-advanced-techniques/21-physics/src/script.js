@@ -50,8 +50,8 @@ const defaultContactMaterial = new CANNON.ContactMaterial(
   defaultMaterial,
   { friction: 0.1, restitution: 0.7 }
 );
-world.addContactMaterial(defaultContactMaterial);
-// world.defaultContactMaterial = defaultContactMaterial; 
+// world.addContactMaterial(defaultContactMaterial);
+world.defaultContactMaterial = defaultContactMaterial; 
 
 // Sphere
 const sphereShape = new CANNON.Sphere(0.5);
@@ -59,14 +59,15 @@ const sphereBody = new CANNON.Body({
   mass: 1,
   position: new CANNON.Vec3(0, 3, 0),
   shape: sphereShape,
-  material: defaultMaterial
+  // material: defaultMaterial
 });
+sphereBody.applyLocalForce(new CANNON.Vec3(150,0,0), new CANNON.Vec3(0,0,0))
 world.add(sphereBody);
 
 // Floor
 const floorShape = new CANNON.Plane();
 const floorBody = new CANNON.Body();
-floorBody.material = defaultMaterial;
+// floorBody.material = defaultMaterial;
 floorBody.mass = 0;
 floorBody.addShape(floorShape);
 floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5);
@@ -185,6 +186,7 @@ const tick = () => {
   prevElapsedTime = elapsedTime;
 
   // Update physics world
+  sphereBody.applyForce(new CANNON.Vec3(-0.5,0,0), sphereBody.position)
   world.step(1 / 60, deltaTime, 3);
 
   // sphere.position.x = sphereBody.position.x
