@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import * as dat from "lil-gui";
+import gsap from "gsap";
 
 /**
  * Debug
@@ -11,7 +12,7 @@ const parameters = {
 };
 
 gui.addColor(parameters, "materialColor").onChange(() => {
-  material.color.set(parameters.materialColor)
+  material.color.set(parameters.materialColor);
   particlesMaterial.color.set(parameters.materialColor);
 });
 
@@ -70,7 +71,9 @@ const positions = new Float32Array(particleCount * 3);
 
 for (let i = 0; i < particleCount; i++) {
   positions[i * 3] = (Math.random() - 0.5) * 10; // x position
-  positions[i * 3 + 1] = objectsDistance * 0.5 - Math.random() * objectsDistance * sectionMeshes.length; // y position
+  positions[i * 3 + 1] =
+    objectsDistance * 0.5 -
+    Math.random() * objectsDistance * sectionMeshes.length; // y position
   positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z position
 }
 
@@ -152,9 +155,24 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  * Scroll
  */
 let scrollY = window.scrollY;
+let currentSection = 0;
 
 window.addEventListener("scroll", () => {
   scrollY = window.scrollY;
+
+  const newSection = Math.round(scrollY / sizes.height);
+
+  if (newSection !== currentSection) {
+    currentSection = newSection;
+
+    gsap.to(sectionMeshes[currentSection].rotation, {
+      duration: 1.5,
+      ease: "power2.inOut",
+      x: "+=6",
+      y: "+=3",
+      z: "+=1.5",
+    });
+  }
 });
 
 /**
@@ -192,8 +210,8 @@ const tick = () => {
 
   // Animate Meshes
   for (const mesh of sectionMeshes) {
-    mesh.rotation.x = elapsedTime * 0.1;
-    mesh.rotation.y = elapsedTime * 0.12;
+    mesh.rotation.x += deltaTime * 0.1;
+    mesh.rotation.y += deltaTime * 0.12;
   }
 
   // Render
