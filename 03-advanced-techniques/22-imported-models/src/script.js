@@ -20,11 +20,12 @@ const scene = new THREE.Scene();
  * Models
  */
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('/draco/');
+dracoLoader.setDecoderPath("/draco/");
 
 const gltfLoader = new GLTFLoader();
 gltfLoader.setDRACOLoader(dracoLoader);
 
+// // Flight Helmet
 // gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
 //   // While method
 //   // while(gltf.scene.children.length){
@@ -40,10 +41,23 @@ gltfLoader.setDRACOLoader(dracoLoader);
 //   scene.add(gltf.scene);
 // });
 
-// Load Draco Version
-gltfLoader.load('/models/Duck/glTF-Draco/Duck.gltf', (gltf) => {
+// // Load Draco Version
+// gltfLoader.load("/models/Duck/glTF-Draco/Duck.gltf", (gltf) => {
+//   scene.add(gltf.scene);
+// });
+
+// Animated Fox
+let mixer = null;
+
+gltfLoader.load("/models/Fox/glTF/Fox.gltf", (gltf) => {
+  mixer = new THREE.AnimationMixer(gltf.scene);
+  const action = mixer.clipAction(gltf.animations[1]);
+
+  action.play();
+
+  gltf.scene.scale.set(0.025, 0.025, 0.025);
   scene.add(gltf.scene);
-})
+});
 
 /**
  * Floor
@@ -138,6 +152,11 @@ const tick = () => {
   const elapsedTime = clock.getElapsedTime();
   const deltaTime = elapsedTime - previousTime;
   previousTime = elapsedTime;
+
+  // Update Mixer
+  if (mixer !== null) {
+    mixer.update(deltaTime);
+  }
 
   // Update controls
   controls.update();
