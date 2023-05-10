@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "lil-gui";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 
 /**
  * Base
@@ -18,22 +19,31 @@ const scene = new THREE.Scene();
 /**
  * Models
  */
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('/draco/');
+
 const gltfLoader = new GLTFLoader();
+gltfLoader.setDRACOLoader(dracoLoader);
 
-gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
-  // While method
-  // while(gltf.scene.children.length){
-  //   scene.add(gltf.scene.children[0]);
-  // }
+// gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
+//   // While method
+//   // while(gltf.scene.children.length){
+//   //   scene.add(gltf.scene.children[0]);
+//   // }
 
-  // For Loop method
-  // const children = [...gltf.scene.children];
-  // for (const child of children) {
-  //   scene.add(child);
-  // }
+//   // For Loop method
+//   // const children = [...gltf.scene.children];
+//   // for (const child of children) {
+//   //   scene.add(child);
+//   // }
 
+//   scene.add(gltf.scene);
+// });
+
+// Load Draco Version
+gltfLoader.load('/models/Duck/glTF-Draco/Duck.gltf', (gltf) => {
   scene.add(gltf.scene);
-});
+})
 
 /**
  * Floor
