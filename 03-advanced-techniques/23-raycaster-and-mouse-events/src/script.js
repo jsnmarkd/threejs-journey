@@ -42,9 +42,18 @@ scene.add(object1, object2, object3);
 const raycaster = new THREE.Raycaster();
 const rayOrigin = new THREE.Vector3(-3, 0, 0);
 const rayDirection = new THREE.Vector3(10, 0, 0);
-rayDirection.normalize(); 
+rayDirection.normalize();
 
 raycaster.set(rayOrigin, rayDirection);
+
+// Cast a Ray
+// Option 1
+const intersect = raycaster.intersectObject(object2);
+console.log(intersect);
+
+// Option 2
+const intersects = raycaster.intersectObjects([object1, object2, object3]);
+console.log(intersects);
 
 /**
  * Sizes
