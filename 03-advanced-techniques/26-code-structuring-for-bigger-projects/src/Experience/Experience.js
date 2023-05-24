@@ -1,3 +1,5 @@
+import Sizes from "./Utils/Sizes";
+
 export default class Experience {
   constructor(canvas) {
     // Global access
@@ -6,5 +8,7 @@ export default class Experience {
     // Options
     this.canvas = canvas;
 
+    // Setup
+    this.sizes = new Sizes();
   }
 }
