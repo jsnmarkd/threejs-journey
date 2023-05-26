@@ -2,8 +2,8 @@ import * as THREE from "three";
 import Sizes from "./Utils/Sizes";
 import Time from "./Utils/Time";
 import Camera from "./Camera";
-import Renderer from "./Renderer";
 import World from "./World/World";
+import Renderer from "./Renderer";
 import Resources from "./Utils/Resources";
 import sources from "./sources";
 
@@ -50,6 +50,7 @@ export default class Experience {
 
   update() {
     this.camera.update();
+    this.world.update();
     this.renderer.update();
   }
 }
