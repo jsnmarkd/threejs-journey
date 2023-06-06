@@ -18,6 +18,10 @@ void main()
     // float strength = vUv.y * 10.0; // pattern 6
     // gl_FragColor = vec4(strength, strength, strength, 1.0); 
 
-    float strength = mod(vUv.y * 10.0, 1.0); // pattern 7
+    // float strength = mod(vUv.y * 10.0, 1.0); // pattern 7
+    // gl_FragColor = vec4(strength, strength, strength, 1.0); 
+
+    float strength = mod(vUv.y * 10.0, 1.0); // pattern 8
+    strength = step(0.5, strength);
     gl_FragColor = vec4(strength, strength, strength, 1.0); 
 }
