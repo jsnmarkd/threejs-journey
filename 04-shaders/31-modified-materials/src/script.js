@@ -14,7 +14,7 @@ const canvas = document.querySelector("canvas.webgl");
 
 // Scene
 const scene = new THREE.Scene();
- 
+
 /**
  * Loaders
  */
@@ -70,6 +70,15 @@ const material = new THREE.MeshStandardMaterial({
   map: mapTexture,
   normalMap: normalTexture,
 });
+
+material.onBeforeCompile = (shader) => {
+  shader.vertexShader = shader.vertexShader.replace(
+    "#include <begin_vertex>",
+    `
+      #include <begin_vertex>
+    `
+  );
+};
 
 /**
  * Models
