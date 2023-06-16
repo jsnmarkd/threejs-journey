@@ -6,8 +6,9 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { DotScreenPass } from "three/examples/jsm/postprocessing/DotScreenPass.js";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass.js";
 import { RGBShiftShader } from "three/examples/jsm/shaders/RGBShiftShader.js";
+import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader.js";
 import * as dat from "lil-gui";
 
@@ -173,14 +174,27 @@ const rgbShiftPass = new ShaderPass(RGBShiftShader);
 rgbShiftPass.enabled = false;
 effectComposer.addPass(rgbShiftPass);
 
-const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
-effectComposer.addPass(gammaCorrectionPass);
+const unrealBloomPass = new UnrealBloomPass();
+unrealBloomPass.strength = 0.3;
+unrealBloomPass.radius = 1;
+unrealBloomPass.threshold = 0.6;
+unrealBloomPass.enabled = true;
+effectComposer.addPass(unrealBloomPass);
+
+gui.add(unrealBloomPass, 'enabled');
+gui.add(unrealBloomPass, 'strength').min(0).max(2).step(0.001);
+gui.add(unrealBloomPass, 'radius').min(0).max(2).step(0.001);
+gui.add(unrealBloomPass, 'threshold').min(0).max(1).step(0.001);
 
 if(renderer.getPixelRatio() === 1 && !renderer.capabilities.isWebGL2){
   const smaaPass = new SMAAPass();
   effectComposer.addPass(smaaPass);
   console.log('Using SMAA');
 }
+
+const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
+effectComposer.addPass(gammaCorrectionPass);
+
 
 /**
  * Animate
