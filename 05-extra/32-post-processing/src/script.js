@@ -148,11 +148,9 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 /**
  * Post Processing
  */
-const renderTarget = new THREE.WebGLRenderTarget(
-  800, 
-  600, 
-  { samples: renderer.getPixelRatio() === 1 ? 2 : 0 }, 
-);
+const renderTarget = new THREE.WebGLRenderTarget(800, 600, {
+  samples: renderer.getPixelRatio() === 1 ? 2 : 0,
+});
 
 const effectComposer = new EffectComposer(renderer, renderTarget);
 effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -167,7 +165,7 @@ effectComposer.addPass(dotScreenPass);
 
 const glitchPass = new GlitchPass();
 glitchPass.goWild = false;
-glitchPass.enabled = true;
+glitchPass.enabled = false;
 effectComposer.addPass(glitchPass);
 
 const rgbShiftPass = new ShaderPass(RGBShiftShader);
@@ -181,20 +179,54 @@ unrealBloomPass.threshold = 0.6;
 unrealBloomPass.enabled = true;
 effectComposer.addPass(unrealBloomPass);
 
-gui.add(unrealBloomPass, 'enabled');
-gui.add(unrealBloomPass, 'strength').min(0).max(2).step(0.001);
-gui.add(unrealBloomPass, 'radius').min(0).max(2).step(0.001);
-gui.add(unrealBloomPass, 'threshold').min(0).max(1).step(0.001);
+gui.add(unrealBloomPass, "enabled");
+gui.add(unrealBloomPass, "strength").min(0).max(2).step(0.001);
+gui.add(unrealBloomPass, "radius").min(0).max(2).step(0.001);
+gui.add(unrealBloomPass, "threshold").min(0).max(1).step(0.001);
 
-if(renderer.getPixelRatio() === 1 && !renderer.capabilities.isWebGL2){
+const TintShader = {
+  uniforms: { tDiffuse: { value: null }, uTint: { value: null } },
+  vertexShader: `
+    varying vec2 vUv;
+
+    void main()
+    {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+      vUv = uv;
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D tDiffuse;
+    uniform vec3 uTint;
+
+    varying vec2 vUv;
+
+    void main()
+    {
+      vec4 color = texture2D(tDiffuse, vUv);
+      color.rgb += uTint;
+
+      gl_FragColor = color;
+    }
+  `,
+};
+const tintPass = new ShaderPass(TintShader);
+tintPass.material.uniforms.uTint.value = new THREE.Vector3();
+effectComposer.addPass(tintPass);
+
+gui.add(tintPass.material.uniforms.uTint.value, 'x').min(-1).max(1).step(0.001).name('red');
+gui.add(tintPass.material.uniforms.uTint.value, 'y').min(-1).max(1).step(0.001).name('blue');
+gui.add(tintPass.material.uniforms.uTint.value, 'z').min(-1).max(1).step(0.001).name('green');
+
+if (renderer.getPixelRatio() === 1 && !renderer.capabilities.isWebGL2) {
   const smaaPass = new SMAAPass();
   effectComposer.addPass(smaaPass);
-  console.log('Using SMAA');
+  console.log("Using SMAA");
 }
 
 const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
 effectComposer.addPass(gammaCorrectionPass);
-
 
 /**
  * Animate
