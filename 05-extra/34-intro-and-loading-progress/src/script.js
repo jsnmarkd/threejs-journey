@@ -6,12 +6,19 @@ import { gsap } from "gsap";
 /**
  * Loaders
  */
+const loadingBarElement = document.querySelector('.loading-bar');
+
 const loadingManager = new THREE.LoadingManager(
+  // Loaded
   () => {
     gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0 });
   },
-  () => {
-    console.log("progress");
+
+  // Progress
+  (itemUrl, itemsLoaded, itemsTotal) => {
+    const progressRatio = itemsLoaded / itemsTotal;
+    loadingBarElement.style.transform = `scaleX(${progressRatio})`;
+    console.log("Progress Ratio", progressRatio);
   }
 );
 const gltfLoader = new GLTFLoader(loadingManager);
