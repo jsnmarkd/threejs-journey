@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import Stats from 'stats.js';
+import Stats from "stats.js";
+import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 
 // Stats
 const stats = new Stats();
@@ -164,74 +165,80 @@ tick();
 // cube.material.dispose()
 
 // // Tip 10 - Optimize Shadow Maps
-directionalLight.shadow.camera.top = 3
-directionalLight.shadow.camera.right = 6
-directionalLight.shadow.camera.left = - 6
-directionalLight.shadow.camera.bottom = - 3
-directionalLight.shadow.camera.far = 10
-directionalLight.shadow.mapSize.set(1024, 1024)
+directionalLight.shadow.camera.top = 3;
+directionalLight.shadow.camera.right = 6;
+directionalLight.shadow.camera.left = -6;
+directionalLight.shadow.camera.bottom = -3;
+directionalLight.shadow.camera.far = 10;
+directionalLight.shadow.mapSize.set(1024, 1024);
 
-const cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
-scene.add(cameraHelper)
+const cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+scene.add(cameraHelper);
 
 // // Tip 11 - Use castShadow and receiveShadow wisely
-cube.castShadow = true
-cube.receiveShadow = false
+cube.castShadow = true;
+cube.receiveShadow = false;
 
-torusKnot.castShadow = true
-torusKnot.receiveShadow = false
+torusKnot.castShadow = true;
+torusKnot.receiveShadow = false;
 
-sphere.castShadow = true
-sphere.receiveShadow = false
+sphere.castShadow = true;
+sphere.receiveShadow = false;
 
-floor.castShadow = false
-floor.receiveShadow = true
+floor.castShadow = false;
+floor.receiveShadow = true;
 
 // // Tip 12 - Deactivate shadow auto update
-renderer.shadowMap.autoUpdate = false
-renderer.shadowMap.needsUpdate = true
+renderer.shadowMap.autoUpdate = false;
+renderer.shadowMap.needsUpdate = true;
 
 // // Tip 18 - Mutualize Geometries
-const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+// const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 
-for(let i = 0; i < 50; i++)
-{
+// for (let i = 0; i < 50; i++) {
+//   const material = new THREE.MeshNormalMaterial();
 
-    const material = new THREE.MeshNormalMaterial()
+//   const mesh = new THREE.Mesh(geometry, material);
+//   mesh.position.x = (Math.random() - 0.5) * 10;
+//   mesh.position.y = (Math.random() - 0.5) * 10;
+//   mesh.position.z = (Math.random() - 0.5) * 10;
+//   mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2;
+//   mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2;
 
-    const mesh = new THREE.Mesh(geometry, material)
-    mesh.position.x = (Math.random() - 0.5) * 10
-    mesh.position.y = (Math.random() - 0.5) * 10
-    mesh.position.z = (Math.random() - 0.5) * 10
-    mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2
-    mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2
-
-    scene.add(mesh)
-}
-
-// // Tip 19
-// for(let i = 0; i < 50; i++)
-// {
-//     const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
-
-//     const material = new THREE.MeshNormalMaterial()
-
-//     const mesh = new THREE.Mesh(geometry, material)
-//     mesh.position.x = (Math.random() - 0.5) * 10
-//     mesh.position.y = (Math.random() - 0.5) * 10
-//     mesh.position.z = (Math.random() - 0.5) * 10
-//     mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2
-//     mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2
-
-//     scene.add(mesh)
+//   scene.add(mesh);
 // }
 
-// // Tip 20
+// // Tip 19 - Merge Geometries
+// const geometries = [];
+// for (let i = 0; i < 50; i++) {
+//   const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+
+//   geometry.rotateX((Math.random() - 0.5) * Math.PI * 2);
+//   geometry.rotateY((Math.random() - 0.5) * Math.PI * 2);
+
+//   geometry.translate(
+//     (Math.random() - 0.5) * 10,
+//     (Math.random() - 0.5) * 10,
+//     (Math.random() - 0.5) * 10
+//   );
+
+//   geometries.push(geometry);
+// }
+
+// const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
+// console.log(mergedGeometry);
+
+// const material = new THREE.MeshNormalMaterial();
+
+// const mesh = new THREE.Mesh(mergedGeometry, material);
+// scene.add(mesh);
+
+// // Tip 20 - Mutualize Materials
 // const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+// const material = new THREE.MeshNormalMaterial()
 
 // for(let i = 0; i < 50; i++)
 // {
-//     const material = new THREE.MeshNormalMaterial()
 
 //     const mesh = new THREE.Mesh(geometry, material)
 //     mesh.position.x = (Math.random() - 0.5) * 10
@@ -244,21 +251,42 @@ for(let i = 0; i < 50; i++)
 // }
 
 // // Tip 22
-// const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 
-// const material = new THREE.MeshNormalMaterial()
+const material = new THREE.MeshNormalMaterial();
 
-// for(let i = 0; i < 50; i++)
-// {
-//     const mesh = new THREE.Mesh(geometry, material)
-//     mesh.position.x = (Math.random() - 0.5) * 10
-//     mesh.position.y = (Math.random() - 0.5) * 10
-//     mesh.position.z = (Math.random() - 0.5) * 10
-//     mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2
-//     mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2
+const mesh = new THREE.InstancedMesh(geometry, material, 50);
+mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+scene.add(mesh);
 
-//     scene.add(mesh)
-// }
+for (let i = 0; i < 50; i++) {
+  const position = new THREE.Vector3(
+    (Math.random() - 0.5) * 10,
+    (Math.random() - 0.5) * 10,
+    (Math.random() - 0.5) * 10,
+  )
+
+
+  const quaternion = new THREE.Quaternion();
+  quaternion.setFromEuler(new THREE.Euler(
+    (Math.random() - 0.5) * Math.PI * 2,
+    (Math.random() - 0.5) * Math.PI * 2,
+    0
+  ))
+
+  const matrix = new THREE.Matrix4();
+  matrix.makeRotationFromQuaternion(quaternion);
+  matrix.setPosition(position);
+  mesh.setMatrixAt(i, matrix);
+
+  // const mesh = new THREE.Mesh(geometry, material);
+  // mesh.position.x = (Math.random() - 0.5) * 10;
+  // mesh.position.y = (Math.random() - 0.5) * 10;
+  // mesh.position.z = (Math.random() - 0.5) * 10;
+  // mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2;
+  // mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2;
+
+}
 
 // // Tip 29
 // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
