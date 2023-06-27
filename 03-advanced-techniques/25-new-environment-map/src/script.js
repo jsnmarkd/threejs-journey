@@ -1,9 +1,10 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import * as dat from "lil-gui";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
-import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader";
+import { RGBELoader } from "three/addons/loaders/RGBELoader";
+import { EXRLoader } from "three/addons/loaders/EXRLoader";
+import { GroundProjectedSkybox } from "three/addons/objects/GroundProjectedSkybox";
 
 /**
  * Loaders
@@ -85,15 +86,31 @@ gui
 //   scene.environment = environmentMap;
 // });
 
-// LDR Equirectangular
-const environmentMap = textureLoader.load(
-  "environmentMaps/blockadesLabsSkybox/anime_art_style_japan_streets_with_cherry_blossom_.jpg"
-);
-environmentMap.mapping = THREE.EquirectangularReflectionMapping;
-environmentMap.colorSpace = THREE.SRGBColorSpace;
+// // LDR Equirectangular
+// const environmentMap = textureLoader.load(
+//   "environmentMaps/blockadesLabsSkybox/anime_art_style_japan_streets_with_cherry_blossom_.jpg"
+// );
+// environmentMap.mapping = THREE.EquirectangularReflectionMapping;
+// environmentMap.colorSpace = THREE.SRGBColorSpace;
 
-scene.background = environmentMap;
-scene.environment = environmentMap;
+// scene.background = environmentMap;
+// scene.environment = environmentMap;
+
+// Ground Projected Skybox
+rgbeLoader.load("environmentMaps/2/2k.hdr", (environmentMap) => {
+  environmentMap.mapping = THREE.EquirectangularReflectionMapping;
+  scene.environment = environmentMap;
+
+  // Skybox
+  const skybox = new GroundProjectedSkybox(environmentMap);
+  skybox.radius = 120;
+  skybox.height = 11;
+  skybox.scale.setScalar(50);
+  scene.add(skybox);
+
+  gui.add(skybox, 'radius', 1, 200, 0.1).name('skyboxRadius');
+  gui.add(skybox, 'height', 1, 100, 0.1).name('skyboxHeight');
+});
 
 /**
  * Torus Knot
