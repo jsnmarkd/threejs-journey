@@ -35,23 +35,27 @@ gltfLoader.setDRACOLoader(dracoLoader);
 /**
  * Textures
  */
-const bakedTexture = textureLoader.load("baked-jsn.jpg");
+const bakedTexture = textureLoader.load("baked2-jsn.jpg");
 bakedTexture.flipY = false;
 bakedTexture.colorSpace = THREE.SRGBColorSpace;
 
 /**
  * Materials
  */
+
 // Baked material
 const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture });
+
+// Pole light material
+const poleLightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffe5 });
 
 /**
  * Model
  */
-gltfLoader.load("portal-jsn.glb", (gltf) => {
+gltfLoader.load("portal-jsn-fix.glb", (gltf) => {
   gltf.scene.traverse((child) => {
     child.material = bakedMaterial;
-  })
+  });
   scene.add(gltf.scene);
 });
 
