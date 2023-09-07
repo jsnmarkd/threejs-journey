@@ -111,6 +111,7 @@ firefliesGeometry.setAttribute(
 
 // Material
 const firefliesMaterial = new THREE.ShaderMaterial({
+  blending: THREE.AdditiveBlending,
   transparent: true,
   uniforms: {
     uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
