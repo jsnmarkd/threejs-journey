@@ -115,6 +115,7 @@ const firefliesMaterial = new THREE.ShaderMaterial({
   blending: THREE.AdditiveBlending,
   transparent: true,
   uniforms: {
+    uTime: { value: 0 },
     uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
     uSize: { value: 100.0 },
   },
@@ -198,6 +199,9 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  // Update Materials
+  firefliesMaterial.uniforms.uTime.value = elapsedTime;
 
   // Update controls
   controls.update();
