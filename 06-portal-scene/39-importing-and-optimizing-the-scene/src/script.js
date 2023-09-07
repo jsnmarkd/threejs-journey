@@ -111,6 +111,7 @@ firefliesGeometry.setAttribute(
 
 // Material
 const firefliesMaterial = new THREE.ShaderMaterial({
+  depthWrite: false,
   blending: THREE.AdditiveBlending,
   transparent: true,
   uniforms: {
