@@ -8,6 +8,7 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
  * Base
  */
 // Debug
+const debugObject = {};
 const gui = new dat.GUI({
   width: 400,
 });
@@ -47,7 +48,10 @@ bakedTexture.colorSpace = THREE.SRGBColorSpace;
 const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture });
 
 // Portal light material
-const portalLightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+const portalLightMaterial = new THREE.MeshBasicMaterial({
+  color: 0xffffff,
+  side: THREE.DoubleSide,
+});
 
 // Pole light material
 const poleLightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
@@ -125,6 +129,12 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+debugObject.clearColor = "#201919";
+renderer.setClearColor(debugObject.clearColor);
+gui.addColor(debugObject, "clearColor").onChange(() => {
+  renderer.setClearColor(debugObject.clearColor);
+});
 
 /**
  * Animate
