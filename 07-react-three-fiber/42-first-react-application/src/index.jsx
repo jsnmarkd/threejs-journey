@@ -11,7 +11,7 @@ root.render(
       {/* Some comment */}
       Hello {toto}
     </h1>
-    <p>
+    <p className="cute-paragraph">
       Some content <br /> {Math.random()}
     </p>
     <input type="checkbox" id="the-checkbox" />
