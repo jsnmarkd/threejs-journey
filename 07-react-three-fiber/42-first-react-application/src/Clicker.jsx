@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 
-export default function Clicker() {
+export default function Clicker({ keyName, color }) {
   const [count, setCount] = useState(
-    parseInt(localStorage.getItem("count") ?? 0)
+    parseInt(localStorage.getItem(keyName) ?? 0)
   );
 
   useEffect(() => {
     return () => {
-      localStorage.removeItem("count");
+      localStorage.removeItem(keyName);
     };
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("count", count);
+    localStorage.setItem(keyName, count);
   }, [count]);
 
   const buttonClick = () => {
@@ -21,7 +21,8 @@ export default function Clicker() {
 
   return (
     <div>
-      Clicker count: {count}
+      <div style={{ color }}>Clicker count: {count}</div>
+
       <button onClick={buttonClick}>Click me</button>
     </div>
   );
