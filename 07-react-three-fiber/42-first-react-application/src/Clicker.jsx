@@ -5,7 +5,6 @@ export default function Clicker({ keyName, color, increment }) {
     parseInt(localStorage.getItem(keyName) ?? 0)
   );
   const button = useRef();
-  console.log(button);
 
   useEffect(() => {
     button.current.style.backgroundColor = 'papayawhip';
