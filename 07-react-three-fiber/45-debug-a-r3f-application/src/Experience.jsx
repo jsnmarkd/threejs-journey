@@ -1,6 +1,7 @@
 import Cube from "./Cube.jsx";
 import { OrbitControls } from "@react-three/drei";
 import { useControls, button } from "leva";
+import { Perf } from "r3f-perf";
 
 export default function Experience() {
   const { position, color, visible, myInterval } = useControls("sphere", {
@@ -20,6 +21,8 @@ export default function Experience() {
 
   return (
     <>
+      <Perf position={"top-left"} />
+
       <OrbitControls makeDefault />
 
       <directionalLight position={[1, 2, 3]} intensity={1.5} />
