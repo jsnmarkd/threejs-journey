@@ -4,6 +4,8 @@ import { useControls, button } from "leva";
 import { Perf } from "r3f-perf";
 
 export default function Experience() {
+  const {perfVisible} = useControls("perf monitor", {perfVisible: true});
+
   const { position, color, visible, myInterval } = useControls("sphere", {
     position: { value: { x: -2, y: 0 }, step: 0.01, joystick: "invertY" },
     color: "#ff0000",
@@ -21,7 +23,7 @@ export default function Experience() {
 
   return (
     <>
-      <Perf position={"top-left"} />
+      {perfVisible ? <Perf position={"top-left"} /> : null}
 
       <OrbitControls makeDefault />
 
