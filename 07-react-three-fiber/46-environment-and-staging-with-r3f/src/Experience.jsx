@@ -1,12 +1,12 @@
 import { useFrame } from "@react-three/fiber";
-import { OrbitControls, useHelper } from "@react-three/drei";
+import { OrbitControls, useHelper, BakeShadows } from "@react-three/drei";
 import { useRef } from "react";
 import { Perf } from "r3f-perf";
-import * as THREE from 'three';
+import * as THREE from "three";
 
 export default function Experience() {
   const directionalLight = useRef();
-  useHelper(directionalLight, THREE.DirectionalLightHelper, 1)
+  useHelper(directionalLight, THREE.DirectionalLightHelper, 1);
 
   const cube = useRef();
 
@@ -16,12 +16,25 @@ export default function Experience() {
 
   return (
     <>
+      <BakeShadows />
       <color args={["ivory"]} attach={"background"} />
       <Perf position="top-left" />
 
       <OrbitControls makeDefault />
 
-      <directionalLight ref={directionalLight} castShadow position={[1, 2, 3]} intensity={1.5} />
+      <directionalLight
+        ref={directionalLight}
+        position={[1, 2, 3]}
+        intensity={1.5}
+        castShadow
+        shadow-mapSize={[1024, 1024]}
+        shadow-camera-near={1}
+        shadow-camera-far={10}
+        shadow-camera-top={5}
+        shadow-camera-right={5}
+        shadow-camera-bottom={-5}
+        shadow-camera-left={-5}
+      />
       <ambientLight intensity={0.5} />
 
       <mesh castShadow position-x={-2}>
@@ -34,7 +47,12 @@ export default function Experience() {
         <meshStandardMaterial color="mediumpurple" />
       </mesh>
 
-      <mesh position-y={-1} receiveShadow rotation-x={-Math.PI * 0.5} scale={10}>
+      <mesh
+        position-y={-1}
+        receiveShadow
+        rotation-x={-Math.PI * 0.5}
+        scale={10}
+      >
         <planeGeometry />
         <meshStandardMaterial color="greenyellow" />
       </mesh>
