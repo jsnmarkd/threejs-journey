@@ -9,6 +9,7 @@ import {
   ContactShadows,
   Sky,
   Environment,
+  Lightformer,
 } from "@react-three/drei";
 import { useRef } from "react";
 import { Perf } from "r3f-perf";
@@ -43,10 +44,17 @@ export default function Experience() {
 
   return (
     <>
-      <Environment
-        background
-        preset="sunset"
-      />
+      <Environment background preset="sunset" resolution={32}>
+        <color args={["#000000"]} attach={"background"} />
+        <Lightformer
+          position-z={-5}
+          scale={10}
+          color={"red"}
+          intensity={10}
+          form={"ring"}
+        />
+      </Environment>
+
       {/* <BakeShadows /> */}
       {/* <SoftShadows
         frustum={3.75}
