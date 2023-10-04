@@ -29,7 +29,7 @@ export default function Experience() {
   });
 
   const { color, opacity, blur } = useControls("contact shadows", {
-    color: "#1d8f75",
+    color: "#4b2709",
     opacity: { value: 0.4, min: 0, max: 1 },
     blur: { value: 2.8, min: 0, max: 10 },
   });
@@ -38,21 +38,20 @@ export default function Experience() {
     sunPosition: { value: [1, 2, 3] },
   });
 
-  const { envMapIntensity } = useControls("environment map", {
+  const { envMapIntensity, envMapHeight, envMapRadius, envMapScale } = useControls("environment map", {
     envMapIntensity: { value: 3.5, min: 0, man: 12 },
+    envMapHeight: { value: 7, min: 0, max: 100 },
+    envMapRadius: { value: 28, min: 10, max: 100 },
+    envMapScale: { value: 100, min: 10, max: 1000 },
   });
 
   return (
     <>
-      <Environment background preset="sunset" resolution={32}>
+      <Environment
+        preset="sunset"
+        ground={{ height: envMapHeight, radius: envMapRadius, scale: envMapScale }}
+      >
         <color args={["#000000"]} attach={"background"} />
-        <Lightformer
-          position-z={-5}
-          scale={10}
-          color={"red"}
-          intensity={10}
-          form={"ring"}
-        />
       </Environment>
 
       {/* <BakeShadows /> */}
@@ -88,7 +87,7 @@ export default function Experience() {
         />
       </AccumulativeShadows> */}
       <ContactShadows
-        position={[0, -0.99, 0]}
+        position={[0, 0, 0]}
         scale={10}
         resolution={512}
         far={5}
@@ -115,7 +114,7 @@ export default function Experience() {
 
       {/* <Sky sunPosition={sunPosition} /> */}
 
-      <mesh castShadow position-x={-2}>
+      <mesh castShadow position-y={1} position-x={-2}>
         <sphereGeometry />
         <meshStandardMaterial
           envMapIntensity={envMapIntensity}
@@ -123,19 +122,11 @@ export default function Experience() {
         />
       </mesh>
 
-      <mesh ref={cube} castShadow position-x={2} scale={1.5}>
+      <mesh ref={cube} castShadow position-y={1} position-x={2} scale={1.5}>
         <boxGeometry />
         <meshStandardMaterial
           envMapIntensity={envMapIntensity}
           color="mediumpurple"
-        />
-      </mesh>
-
-      <mesh position-y={-1} rotation-x={-Math.PI * 0.5} scale={10}>
-        <planeGeometry />
-        <meshStandardMaterial
-          envMapIntensity={envMapIntensity}
-          color="greenyellow"
         />
       </mesh>
     </>
