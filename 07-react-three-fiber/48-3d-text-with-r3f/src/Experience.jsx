@@ -5,13 +5,21 @@ import {
   useMatcapTexture,
 } from "@react-three/drei";
 import { Perf } from "r3f-perf";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 
 export default function Experience() {
   const [torusGeometry, setTorusGeometry] = useState();
   const [material, setMaterial] = useState();
+  const donutsGroup = useRef();
 
   const [matcapTexture] = useMatcapTexture("85B9D3_C9EAF9_417277_528789", 256);
+
+  useFrame((_, delta) => {
+    for (const donut of donutsGroup.current.children) {
+      donut.rotation.y += delta * 0.2;
+    }
+  });
 
   return (
     <>
@@ -35,24 +43,26 @@ export default function Experience() {
           bevelOffset={0}
           bevelSegments={5}
         >
-          JASON
+          DONUTS
         </Text3D>
       </Center>
 
-      {[...Array(100)].map((_, index) => (
-        <mesh
-          key={index}
-          geometry={torusGeometry}
-          material={material}
-          position={[
-            (Math.random() - 0.5) * 10,
-            (Math.random() - 0.5) * 10,
-            (Math.random() - 0.5) * 10,
-          ]}
-          scale={0.2 + Math.random() * 0.2}
-          rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]}
-        />
-      ))}
+      <group ref={donutsGroup}>
+        {[...Array(100)].map((_, index) => (
+          <mesh
+            key={index}
+            geometry={torusGeometry}
+            material={material}
+            position={[
+              (Math.random() - 0.5) * 10,
+              (Math.random() - 0.5) * 10,
+              (Math.random() - 0.5) * 10,
+            ]}
+            scale={0.2 + Math.random() * 0.2}
+            rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]}
+          />
+        ))}
+      </group>
     </>
   );
 }
