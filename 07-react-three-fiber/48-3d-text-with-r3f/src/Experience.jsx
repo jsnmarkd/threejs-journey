@@ -11,12 +11,13 @@ import { useFrame } from "@react-three/fiber";
 export default function Experience() {
   const [torusGeometry, setTorusGeometry] = useState();
   const [material, setMaterial] = useState();
-  const donutsGroup = useRef();
+
+  const donuts = useRef([]);
 
   const [matcapTexture] = useMatcapTexture("85B9D3_C9EAF9_417277_528789", 256);
 
   useFrame((_, delta) => {
-    for (const donut of donutsGroup.current.children) {
+    for (const donut of donuts.current) {
       donut.rotation.y += delta * 0.2;
     }
   });
@@ -47,9 +48,10 @@ export default function Experience() {
         </Text3D>
       </Center>
 
-      <group ref={donutsGroup}>
+
         {[...Array(100)].map((_, index) => (
           <mesh
+            ref={ (element) => donuts.current[index] = element }
             key={index}
             geometry={torusGeometry}
             material={material}
@@ -62,7 +64,7 @@ export default function Experience() {
             rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]}
           />
         ))}
-      </group>
+
     </>
   );
 }
