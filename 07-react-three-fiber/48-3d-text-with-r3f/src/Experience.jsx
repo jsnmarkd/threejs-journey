@@ -8,6 +8,7 @@ import { Perf } from "r3f-perf";
 
 export default function Experience() {
   const [matcapTexture] = useMatcapTexture("85B9D3_C9EAF9_417277_528789", 256);
+
   return (
     <>
       <Perf position="top-left" />
@@ -30,6 +31,22 @@ export default function Experience() {
           <meshMatcapMaterial matcap={matcapTexture} />
         </Text3D>
       </Center>
+
+      {[...Array(100)].map((_, index) => (
+        <mesh
+          key={index}
+          position={[
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 10,
+          ]}
+          scale={0.2 + Math.random() * 0.2}
+          rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]}
+        >
+          <torusGeometry args={[1, 0.6, 16, 32]} />
+          <meshMatcapMaterial matcap={matcapTexture} />
+        </mesh>
+      ))}
     </>
   );
 }
