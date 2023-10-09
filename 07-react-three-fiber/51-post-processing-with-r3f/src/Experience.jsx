@@ -6,6 +6,7 @@ import { BlendFunction } from "postprocessing";
 export default function Experience() {
   return (
     <>
+      <color attach="background" args={["#ffffff"]} />
       <EffectComposer>
         <Vignette
           offset={0.3}
