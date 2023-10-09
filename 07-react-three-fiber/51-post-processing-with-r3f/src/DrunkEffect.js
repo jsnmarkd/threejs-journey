@@ -3,12 +3,13 @@ import { Effect } from "postprocessing";
 const fragmentShader = /* glsl */ `
   void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) 
   {
-    outputColor = vec4(uv, 1.0, 1.0);
+    vec4 color = inputColor;
+    outputColor = inputColor;
   }
 `;
 
-export default class DrunkEffect extends Effect {
-  constructor() {
+export class DrunkEffect extends Effect {
+  constructor(props) {
     super("DrunkEffect", fragmentShader, {});
   }
-}
+};

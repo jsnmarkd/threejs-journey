@@ -11,8 +11,12 @@ import {
 } from "@react-three/postprocessing";
 import { BlendFunction, GlitchMode } from "postprocessing";
 import { useControls } from "leva";
+import Drunk from "./Drunk";
+import { useRef } from "react";
 
 export default function Experience() {
+  const drunkRef = useRef();
+
   // const ssrProps = useControls("SSR Effect", {
   //   temporalResolve: true,
   //   STRETCH_MISSED_RAYS: true,
@@ -66,6 +70,7 @@ export default function Experience() {
           bokehScale={6}
         /> */}
         {/* <SSR {...ssrProps} /> */}
+        <Drunk ref={drunkRef} frequency={2} amplitude={0.1} />
       </EffectComposer>
       <Perf position="top-left" />
 
@@ -91,7 +96,7 @@ export default function Experience() {
         scale={10}
       >
         <planeGeometry />
-        <meshStandardMaterial color="#000000" metalness={0} roughness={0} />
+        <meshStandardMaterial color="greenyellow" />
       </mesh>
     </>
   );
