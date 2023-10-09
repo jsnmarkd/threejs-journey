@@ -1,18 +1,32 @@
 import { OrbitControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
-import { EffectComposer, Vignette } from "@react-three/postprocessing";
-import { BlendFunction } from "postprocessing";
+import {
+  EffectComposer,
+  Vignette,
+  Glitch,
+  Noise,
+  Bloom,
+} from "@react-three/postprocessing";
+import { BlendFunction, GlitchMode } from "postprocessing";
 
 export default function Experience() {
   return (
     <>
-      <color attach="background" args={["#ffffff"]} />
+      <color attach="background" args={["#000000"]} />
       <EffectComposer>
-        <Vignette
+        {/* <Vignette
           offset={0.3}
           darkness={0.9}
           blendFunction={BlendFunction.NORMAL}
-        />
+        /> */}
+        {/* <Glitch
+          delay={[0.5, 1]}
+          duration={[0.1, 0.3]}
+          strength={[0.2, 0.4]}
+          mode={GlitchMode.CONSTANT_MILD}
+        /> */}
+        {/* <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} /> */}
+        <Bloom mipmapBlur intensity={0.1} luminanceThreshold={0} />
       </EffectComposer>
       <Perf position="top-left" />
 
@@ -28,7 +42,7 @@ export default function Experience() {
 
       <mesh castShadow position-x={2} scale={1.5}>
         <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" />
+        <meshBasicMaterial color={[5, 2, 1]} toneMapped={false} />
       </mesh>
 
       <mesh
