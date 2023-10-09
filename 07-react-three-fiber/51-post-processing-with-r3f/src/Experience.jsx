@@ -47,6 +47,12 @@ export default function Experience() {
   //   thickness: { value: 10, min: 0, max: 10 },
   //   ior: { value: 1.45, min: 0, max: 2 },
   // });
+
+  const drunkProps = useControls("Drunk Effect", {
+    frequency: { value: 2, min: 1, max: 20 },
+    amplitude: { value: 0.1, min: 0, max: 1 },
+  });
+
   return (
     <>
       <color attach="background" args={["#ffffff"]} />
@@ -70,7 +76,7 @@ export default function Experience() {
           bokehScale={6}
         /> */}
         {/* <SSR {...ssrProps} /> */}
-        <Drunk ref={drunkRef} frequency={2} amplitude={0.1} />
+        <Drunk ref={drunkRef} {...drunkProps} />
       </EffectComposer>
       <Perf position="top-left" />
 
