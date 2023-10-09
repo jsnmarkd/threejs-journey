@@ -76,7 +76,11 @@ export default function Experience() {
           bokehScale={6}
         /> */}
         {/* <SSR {...ssrProps} /> */}
-        <Drunk ref={drunkRef} {...drunkProps} />
+        <Drunk
+          ref={ drunkRef }
+          {...drunkProps}
+          blendFunction={ BlendFunction.DARKEN }
+        />
       </EffectComposer>
       <Perf position="top-left" />
 
