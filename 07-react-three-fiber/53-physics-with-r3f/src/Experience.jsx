@@ -1,11 +1,13 @@
 import { OrbitControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 import { Physics, RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
 export default function Experience() {
+  const [hitSound] = useState(() => new Audio("./hit.mp3"));
+
   const cube = useRef();
   const twister = useRef();
 
@@ -34,6 +36,12 @@ export default function Experience() {
     twister.current.setNextKinematicTranslation({ x: x, y: -0.8, z: z });
   });
 
+  const collisionEnter = () => {
+    hitSound.currentTime = 0;
+    hitSound.volume = Math.random();
+    hitSound.play();
+  };
+
   return (
     <>
       <Perf position="top-left" />
@@ -60,6 +68,7 @@ export default function Experience() {
           restitution={0}
           friction={0.7}
           colliders={false}
+          onCollisionEnter={collisionEnter}
         >
           <CuboidCollider mass={2} args={[0.5, 0.5, 0.5]} />
           <mesh castShadow onClick={cubeJump}>
