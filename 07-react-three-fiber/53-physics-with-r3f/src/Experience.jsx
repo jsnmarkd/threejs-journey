@@ -21,11 +21,17 @@ export default function Experience() {
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
+
     const eulerRotation = new THREE.Euler(0, time * 3, 0);
     const quaternionRotation = new THREE.Quaternion().setFromEuler(
       eulerRotation
     );
     twister.current.setNextKinematicRotation(quaternionRotation);
+
+    const angle = time * 0.5;
+    const x = Math.cos(angle) * 2;
+    const z = Math.sin(angle) * 2;
+    twister.current.setNextKinematicTranslation({ x: x, y: -0.8, z: z });
   });
 
   return (
