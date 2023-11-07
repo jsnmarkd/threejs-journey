@@ -5,8 +5,9 @@ import {
   RigidBody,
   CuboidCollider,
   CylinderCollider,
+  InstancedRigidBodies,
 } from "@react-three/rapier";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -14,7 +15,6 @@ export default function Experience() {
   const [hitSound] = useState(() => new Audio("./hit.mp3"));
 
   const cube = useRef();
-  const cubes = useRef();
   const twister = useRef();
 
   const cubeJump = () => {
@@ -50,18 +50,23 @@ export default function Experience() {
 
   const hamburger = useGLTF("./hamburger.glb");
 
-  const cubesCount = 3;
+  const cubesCount = 55;
 
-  useEffect(() => {
+  const instances = useMemo(() => {
+    const instances = [];
+
     for (let i = 0; i < cubesCount; i++) {
-      const matrix = new THREE.Matrix4();
-      matrix.compose(
-        new THREE.Vector3(i * 2, 0, 0),
-        new THREE.Quaternion(),
-        new THREE.Vector3(1, 1, 1)
-      );
-      cubes.current.setMatrixAt(i, matrix);
+      instances.push({
+        key: "instance_" + i,
+        position: [
+          (Math.random() - 0.5) * 4,
+          6 + i * 0.2,
+          (Math.random() - 0.5) * 4,
+        ],
+        rotation: [0, 0, 0],
+      });
     }
+    return instances;
   }, []);
 
   return (
@@ -73,7 +78,7 @@ export default function Experience() {
       <directionalLight castShadow position={[1, 2, 3]} intensity={1.5} />
       <ambientLight intensity={0.5} />
 
-      <Physics debug gravity={[0, -9.08, 0]}>
+      <Physics gravity={[0, -9.08, 0]}>
         {/* Sphere */}
         <RigidBody colliders="ball">
           <mesh castShadow position={[-1.5, 2, 0]}>
@@ -134,10 +139,13 @@ export default function Experience() {
           <CuboidCollider args={[0.5, 2, 5]} position={[-5.25, 1, 0]} />
         </RigidBody>
 
-        <instancedMesh ref={cubes} castShadow args={[null, null, cubesCount]}>
-          <boxGeometry />
-          <meshStandardMaterial color="tomato" />
-        </instancedMesh>
+        {/* Cubes */}
+        <InstancedRigidBodies instances={instances}>
+          <instancedMesh castShadow args={[null, null, cubesCount]}>
+            <boxGeometry />
+            <meshStandardMaterial color="tomato" />
+          </instancedMesh>
+        </InstancedRigidBodies>
       </Physics>
     </>
   );
